@@ -1,5 +1,12 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { Button, TextField, Container, Typography, Grid } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Grid,
+  dividerClasses,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 interface FormProps {}
@@ -17,9 +24,9 @@ const Form: FC<FormProps> = () => {
       );
       const data = await response.json();
       console.log(data);
-      setApiResponse(data)
+      setApiResponse(data);
     } catch (error) {
-      console.log(error);
+      console.log("Error while fetching : ", error);
     }
   };
 
@@ -33,81 +40,102 @@ const Form: FC<FormProps> = () => {
       fetchData(asteroidId);
       setAsteroidId("");
     } catch (error) {
-      console.log(error);
+      console.log("Error (Form) : ", error);
     }
   };
 
-// fetch random id
-const randomAsteroid = (id){
-    
-}
+  // fetch random id
+  // const randomAsteroid = (id){
+
+  // }
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAsteroidId(e.target.value);
   };
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        border: "2px solid #000",
-        borderRadius: "8px",
-        padding: "16px",
-        marginTop: "24px",
-        textAlign: "center",
-      }}
-    >
-      <Grid container spacing={2} justifyContent="center" alignItems="center">
-        <Grid item xs={12}>
-          <Typography
-            variant="h3"
-            fontFamily={"Poppins"}
-            align={"center"}
-            fontWeight={"bold"}
-            gutterBottom
-          >
-            Asteroid
-          </Typography>
+    <>
+      <Container
+        maxWidth="sm"
+        sx={{
+          border: "2px solid #000",
+          borderRadius: "8px",
+          padding: "16px",
+          marginTop: "24px",
+          textAlign: "center",
+        }}
+      >
+        <Grid container spacing={2} justifyContent="center" alignItems="center">
+          <Grid item xs={12}>
+            <Typography
+              variant="h3"
+              fontFamily={"Poppins"}
+              align={"center"}
+              fontWeight={"bold"}
+              gutterBottom
+            >
+              Asteroid
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2} alignItems="center">
+                <Grid item xs={9}>
+                  <TextField
+                    variant="outlined"
+                    placeholder="Enter ID"
+                    fullWidth
+                    sx={{ padding: "7px" }}
+                    value={asteroidId}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{ height: "100%", width: "100%", padding: "12px" }}
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+          <Grid item xs={10}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              // onClick={onRandomAsteroid}
+              fullWidth
+              endIcon={<SearchIcon />}
+            >
+              Random Asteroid
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={9}>
-                <TextField
-                  variant="outlined"
-                  placeholder="Enter ID"
-                  fullWidth
-                  sx={{ padding: "7px" }}
-                  value={asteroidId}
-                  onChange={handleInputChange}
-                />
-              </Grid>
-              <Grid item xs={3}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{ height: "100%", width: "100%", padding: "12px" }}
-                  color="primary"
-                >
-                  Submit
-                </Button>
-              </Grid>
+        {/* Returning the API Response */}
+        {apiResponse && (
+          <Grid
+            container
+            spacing={2}
+            mt={"10px"}
+            alignItems={'initial'}
+          >
+            <Grid item xs={12}>
+              <Typography variant="body2">Asteroid Information :</Typography>
             </Grid>
-          </form>
-        </Grid>
-        <Grid item xs={10}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            // onClick={onRandomAsteroid}
-            fullWidth
-            endIcon={<SearchIcon />}
-          >
-            Random Asteroid
-          </Button>
-        </Grid>
-      </Grid>
-    </Container>
+            <Grid item xs={12}>
+              <Typography>ID : {apiResponse.id}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography>NAME : {apiResponse.name}</Typography>
+            </Grid>
+          </Grid>
+        )}
+      </Container>
+    </>
   );
 };
 
