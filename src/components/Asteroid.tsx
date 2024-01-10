@@ -1,5 +1,11 @@
-import React from "react";
-import { Typography, Container, Paper } from "@mui/material";
+import React, { useCallback, useEffect } from "react";
+import {
+  Typography,
+  Container,
+  Paper,
+  Backdrop,
+  CircularProgress,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import asteroidBg from "../assets/asteroidBg.jpg";
 
@@ -28,43 +34,38 @@ const Asteroid: React.FC = () => {
 
   const [apiResponse, setApiResponse] = React.useState<apiResponseType>();
 
-  const [error, setError] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(true);
 
   const API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
   //   fetch logic
-  const fetchData = async (id: string) => {
-    try {
-      const response = await fetch(
-        `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
-      );
-      if (!response.ok) {
-        setError(true);
-        // navigate('/not-found')
-        return;
-        // throw new Error(`request failed with status code : ${response.status}`)
+  const fetchData = useCallback(
+    async (id: string) => {
+      try {
+        const response = await fetch(
+          `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
+        );
+        if (!response.ok) {
+          navigate("/not-found");
+          return;
+          // throw new Error(`request failed with status code : ${response.status}`)
+        }
+        const data = await response.json();
+        // console.log(data);
+        setApiResponse(data);
+      } catch (error) {
+        // navigate("/not-found");
+        console.log("Error while fetching : ", error);
+      } finally {
+        setLoading(false);
       }
-      const data = await response.json();
-      // console.log(data);
-      setApiResponse(data);
-    } catch (error) {
-      navigate("/not-found");
-      console.log("Error while fetching : ", error);
-    }
-  };
+    },
+    [navigate, API_KEY]
+  );
 
-  /* React.useEffect(() => {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  };
-  fetchWithDelay();
-  }, [apiResponse]);
-*/
-  fetchData(asteroidId || "");
-
-  if (error) {
-    navigate("/not-found");
-    return;
-  }
+  useEffect(() => {
+    fetchData(asteroidId || "");
+  }, [asteroidId, fetchData]);
 
   const bgStyling = {
     backgroundImage: `url(${asteroidBg})`,
@@ -86,10 +87,18 @@ const Asteroid: React.FC = () => {
 
   return (
     <Container sx={bgStyling}>
+      {loading && (
+        <Backdrop
+          open={loading}
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       {/* Returning the API Response */}
-      {apiResponse && (
+      {!loading && apiResponse && (
         <Paper sx={panelStyling}>
-          <Typography variant="body2">Asteroid Information :</Typography>
+          <Typography variant="h4" mb={2} fontWeight={"bold"}>Asteroid Information</Typography>
           <Typography>ID : {apiResponse.id}</Typography>
           <Typography>Name : {apiResponse.name}</Typography>
           <Typography>Name (Limited): {apiResponse.name_limited}</Typography>

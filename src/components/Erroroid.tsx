@@ -1,25 +1,9 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Typography,
-  Button,
-  Backdrop,
-  CircularProgress,
-} from "@mui/material";
+import React from "react";
+import { Container, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Erroroid: React.FC = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-
-    // Clear the timeout on component unmount
-    return () => clearTimeout(timeout);
-  }, []);
 
   const containerStyle = {
     // background: `url(${errorImage}) center/cover no-repeat fixed`,
@@ -29,7 +13,6 @@ const Erroroid: React.FC = () => {
     justifyContent: "center",
     minHeight: "100vh",
     width: "100vw",
-    filter: loading ? "blur(7px)" : "none",
   };
 
   const buttonStyle = {
@@ -37,7 +20,6 @@ const Erroroid: React.FC = () => {
   };
 
   const handleGoBack = () => {
-    setLoading(true);
     navigate("/");
   };
 
@@ -57,13 +39,6 @@ const Erroroid: React.FC = () => {
       >
         Go Back
       </Button>
-
-      <Backdrop
-        open={loading}
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <CircularProgress />
-      </Backdrop>
     </Container>
   );
 };

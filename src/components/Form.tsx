@@ -1,11 +1,5 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import {
-  Button,
-  TextField,
-  Container,
-  Typography,
-  Grid,
-} from "@mui/material";
+import { Button, TextField, Container, Typography, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import bgVideo from "../assets/bgVideo.mp4";
@@ -56,7 +50,7 @@ const Form: FC<FormProps> = () => {
       // console.log(dataArray[number]);
       navigate(`/details/${dataArray[number]}`);
     } catch (error) {
-      throw new Error();
+      throw new Error(`${error}`);
     }
   };
 
