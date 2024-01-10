@@ -1,34 +1,14 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import {
-  Button,
-  TextField,
-  Container,
-  Typography,
-  Grid,
-  dividerClasses,
-} from "@mui/material";
+import { Button, TextField, Container, Typography, Grid } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { useNavigate } from "react-router-dom";
+import bgVideo from "../assets/bgVideo.mp4";
 
 interface FormProps {}
 
 const Form: FC<FormProps> = () => {
-  const apiKey = `oVoQnP5Kg0o8SzKUNjQo8uihgPvpbK3wJKEDKe1G`;
   const [asteroidId, setAsteroidId] = useState("");
-  const [apiResponse, setApiResponse] = useState(null);
-
-  // Fetch Data
-  const fetchData = async (id: string) => {
-    try {
-      const response = await fetch(
-        `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${apiKey}`
-      );
-      const data = await response.json();
-      console.log(data);
-      setApiResponse(data);
-    } catch (error) {
-      console.log("Error while fetching : ", error);
-    }
-  };
+  const navigate = useNavigate();
 
   //   fetchData('2000433');
 
@@ -37,7 +17,8 @@ const Form: FC<FormProps> = () => {
 
     try {
       console.log("id : ", asteroidId);
-      fetchData(asteroidId);
+      navigate(`/details/${asteroidId}`);
+      // fetchData(asteroidId);
       setAsteroidId("");
     } catch (error) {
       console.log("Error (Form) : ", error);
@@ -45,9 +26,15 @@ const Form: FC<FormProps> = () => {
   };
 
   // fetch random id
-  // const randomAsteroid = (id){
+  const handleRandom = async (e: FormEvent) => {
+    e.preventDefault();
 
-  // }
+    try {
+    console.log("none")  
+    } catch (error) {
+      throw new Error
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAsteroidId(e.target.value);
@@ -55,6 +42,17 @@ const Form: FC<FormProps> = () => {
 
   return (
     <>
+      <div className="frame">
+        <div className="background-video-container">
+          <video
+            autoPlay
+            loop
+            muted
+            className="background-video"
+            src={bgVideo}
+          />
+        </div>
+      </div>
       <Container
         maxWidth="sm"
         sx={{
@@ -63,6 +61,9 @@ const Form: FC<FormProps> = () => {
           padding: "16px",
           marginTop: "24px",
           textAlign: "center",
+          position: "relative",
+          zIndex: "1",
+          background: "linear-gradient(to bottom right, #aedcf0, #ffb6c1)",
         }}
       >
         <Grid container spacing={2} justifyContent="center" alignItems="center">
@@ -107,7 +108,7 @@ const Form: FC<FormProps> = () => {
             <Button
               variant="outlined"
               color="secondary"
-              // onClick={onRandomAsteroid}
+              onClick={handleRandom}
               fullWidth
               endIcon={<SearchIcon />}
             >
@@ -115,25 +116,6 @@ const Form: FC<FormProps> = () => {
             </Button>
           </Grid>
         </Grid>
-        {/* Returning the API Response */}
-        {apiResponse && (
-          <Grid
-            container
-            spacing={2}
-            mt={"10px"}
-            alignItems={'initial'}
-          >
-            <Grid item xs={12}>
-              <Typography variant="body2">Asteroid Information :</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>ID : {apiResponse.id}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography>NAME : {apiResponse.name}</Typography>
-            </Grid>
-          </Grid>
-        )}
       </Container>
     </>
   );
