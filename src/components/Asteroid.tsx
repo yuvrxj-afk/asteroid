@@ -23,10 +23,12 @@ interface apiResponseType {
 
 const Asteroid: React.FC = () => {
   const { asteroidId } = useParams();
-  console.log(asteroidId);
+
   const navigate = useNavigate();
 
   const [apiResponse, setApiResponse] = React.useState<apiResponseType>();
+
+  const [error, setError] = React.useState<boolean>(false);
 
   const API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
@@ -36,11 +38,14 @@ const Asteroid: React.FC = () => {
       const response = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
       );
-        if(!response.ok){
-          throw new Error(`request failed with status code : ${response.status}`)
-        }
+      if (!response.ok) {
+        setError(true);
+        // navigate('/not-found')
+        return;
+        // throw new Error(`request failed with status code : ${response.status}`)
+      }
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       setApiResponse(data);
     } catch (error) {
       navigate("/not-found");
@@ -48,12 +53,18 @@ const Asteroid: React.FC = () => {
     }
   };
 
-  React.useEffect(() => {
-    // await new Promise((resolve) => setTimeout(resolve, 500));
-      fetchData(asteroidId || "");
-    // };
-    // fetchWithDelay();
+  /* React.useEffect(() => {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  };
+  fetchWithDelay();
   }, [apiResponse]);
+*/
+  fetchData(asteroidId || "");
+
+  if (error) {
+    navigate("/not-found");
+    return;
+  }
 
   const bgStyling = {
     backgroundImage: `url(${asteroidBg})`,
@@ -86,18 +97,18 @@ const Asteroid: React.FC = () => {
             Absolute Magnitude (H): {apiResponse.absolute_magnitude_h}
           </Typography>
           <Typography>
-            Is Potentially Hazardous Asteroid:{" "}
+            Is Potentially Hazardous Asteroid:
             {apiResponse.is_potentially_hazardous_asteroid ? "Yes" : "No"}
           </Typography>
           <Typography>
-            Estimated Diameter (km):{" "}
-            {apiResponse.estimated_diameter?.kilometers?.estimated_diameter_min}{" "}
-            -{" "}
+            Estimated Diameter (km):
+            {apiResponse.estimated_diameter?.kilometers?.estimated_diameter_min}
+            -
             {apiResponse.estimated_diameter?.kilometers?.estimated_diameter_max}
           </Typography>
           <Typography>
-            Estimated Diameter (miles):{" "}
-            {apiResponse.estimated_diameter?.miles?.estimated_diameter_min} -{" "}
+            Estimated Diameter (miles):
+            {apiResponse.estimated_diameter?.miles?.estimated_diameter_min} -
             {apiResponse.estimated_diameter?.miles?.estimated_diameter_max}
           </Typography>
         </Paper>

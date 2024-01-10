@@ -1,38 +1,75 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { Button, TextField, Container, Typography, Grid } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Grid,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
 import bgVideo from "../assets/bgVideo.mp4";
+import asteroidIds from "../constant/asteroid";
 
 interface FormProps {}
 
 const Form: FC<FormProps> = () => {
   const [asteroidId, setAsteroidId] = useState("");
+
   const navigate = useNavigate();
+  const dataArray: string[] = asteroidIds;
 
-  //   fetchData('2000433');
+  // const API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  // const [dataSet, setDataSet] = useState([]);
 
-    try {
-      console.log("id : ", asteroidId);
-      navigate(`/details/${asteroidId}`);
-      // fetchData(asteroidId);
-      setAsteroidId("");
-    } catch (error) {
-      console.log("Error (Form) : ", error);
-    }
-  };
+  // const randomData = async () => {
+  //   const response = await fetch(
+  //     `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${API_KEY}`
+  //   );
+  //   if (!response.ok) {
+  //     throw new Error(`Error with status code ${response.status}`);
+  //   }
+  //   const data = await response.json();
+  //   setDataSet(data.near_earth_objects);
+
+  //   const dataArray: number[] = dataSet.map((i) => i.id);
+  //   return dataArray;
+  // };
+  // console.log(randomData);
+
+  // const randomDataPromise = async () => {
+  //   const data = await randomData();
+  //   dataArray = data;
+  //   return dataArray;
+  // };
 
   // fetch random id
   const handleRandom = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
-    console.log("none")  
+      // const dataArray: number[] = await randomData();
+      // await randomDataPromise();
+      // console.log(dataArray);
+      const number = Math.floor(Math.random() * 20);
+      // console.log(dataArray[number]);
+      navigate(`/details/${dataArray[number]}`);
     } catch (error) {
-      throw new Error
+      throw new Error();
+    }
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // console.log("id : ", asteroidId);
+      navigate(`/details/${asteroidId}`);
+      // fetchData(asteroidId);
+      setAsteroidId("");
+    } catch (error) {
+      console.log("Error (Form) : ", error);
     }
   };
 
@@ -86,6 +123,7 @@ const Form: FC<FormProps> = () => {
                     variant="outlined"
                     placeholder="Enter ID"
                     fullWidth
+                    autoFocus
                     sx={{ padding: "7px" }}
                     value={asteroidId}
                     onChange={handleInputChange}
@@ -97,6 +135,7 @@ const Form: FC<FormProps> = () => {
                     variant="contained"
                     sx={{ height: "100%", width: "100%", padding: "12px" }}
                     color="primary"
+                    disabled={!asteroidId}
                   >
                     Submit
                   </Button>
