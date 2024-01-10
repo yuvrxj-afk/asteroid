@@ -39,29 +39,25 @@ const Asteroid: React.FC = () => {
   const API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
   //   fetch logic
-  const fetchData = useCallback(
-    async (id: string) => {
-      try {
-        const response = await fetch(
-          `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
-        );
-        if (!response.ok) {
-          navigate("/not-found");
-          return;
-          // throw new Error(`request failed with status code : ${response.status}`)
-        }
-        const data = await response.json();
-        // console.log(data);
-        setApiResponse(data);
-      } catch (error) {
-        // navigate("/not-found");
-        console.log("Error while fetching : ", error);
-      } finally {
-        setLoading(false);
+  const fetchData = async (id: string) => {
+    try {
+      const response = await fetch(
+        `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
+      );
+      if (!response.ok) {
+        setError(true);
+        // navigate('/not-found')
+        return;
+        // throw new Error(`request failed with status code : ${response.status}`)
       }
-    },
-    [navigate, API_KEY]
-  );
+      const data = await response.json();
+      // console.log(data);
+      setApiResponse(data);
+    } catch (error) {
+      navigate("/not-found");
+      console.log("Error while fetching : ", error);
+    }
+  };
 
   useEffect(() => {
     fetchData(asteroidId || "");
