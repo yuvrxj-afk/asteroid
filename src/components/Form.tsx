@@ -1,9 +1,19 @@
 import { ChangeEvent, FC, FormEvent, useState } from "react";
-import { Button, TextField, Container, Typography, Grid } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Container,
+  Typography,
+  Grid,
+  Toolbar,
+  AppBar,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
-import bgVideo from "../assets/bgVideo.mp4";
+import bgVideo from "../assets/asteroid.mp4";
 import axios from "axios";
+import { Typewriter } from "react-simple-typewriter";
+import asteroidFunFacts from "../constant/asteroid";
 
 interface FormProps {}
 
@@ -63,17 +73,35 @@ const Form: FC<FormProps> = () => {
 
   return (
     <>
-      <div className="frame">
-        <div className="background-video-container">
-          <video
-            autoPlay
-            loop
-            muted
-            className="background-video"
-            src={bgVideo}
-          />
-        </div>
+      <div className="Asteroid-video-container">
+        <video autoPlay loop muted src={bgVideo} className="asteroid-video" />
       </div>
+
+      <AppBar
+        color="secondary"
+        enableColorOnDark
+        sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
+      >
+        <Toolbar
+         sx={{ padding:'4rem', marginLeft:'1rem'}}
+        >
+          <div
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer", fontSize: "3em" , fontWeight:'bolder' , color:'lightgray' }}
+          >
+            <Typewriter
+              loop
+              cursor
+              cursorStyle="_"
+              typeSpeed={90}
+              deleteSpeed={50}
+              delaySpeed={1000}
+              words={asteroidFunFacts}
+            />
+          </div>
+        </Toolbar>
+      </AppBar>
+
       <Container
         maxWidth="sm"
         sx={{
@@ -84,7 +112,8 @@ const Form: FC<FormProps> = () => {
           textAlign: "center",
           position: "relative",
           zIndex: "1",
-          background: "linear-gradient(to bottom right, #aedcf0, #ffb6c1)",
+          background: `rgba(0, 0, 0, 0.4)`,
+          color: "white",
         }}
       >
         <Grid container spacing={2} justifyContent="center" alignItems="center">
@@ -95,8 +124,9 @@ const Form: FC<FormProps> = () => {
               align={"center"}
               fontWeight={"bold"}
               gutterBottom
+              color="secondary"
             >
-              Asteroid
+              Cosmic Search
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -118,7 +148,7 @@ const Form: FC<FormProps> = () => {
                     type="submit"
                     variant="contained"
                     sx={{ height: "100%", width: "100%", padding: "12px" }}
-                    color="primary"
+                    color="secondary"
                     disabled={!asteroidId}
                   >
                     Submit
@@ -129,7 +159,6 @@ const Form: FC<FormProps> = () => {
           </Grid>
           <Grid item xs={10}>
             <Button
-              variant="outlined"
               color="secondary"
               onClick={handleRandom}
               fullWidth

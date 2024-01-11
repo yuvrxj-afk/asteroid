@@ -1,25 +1,13 @@
-const asteroidIds = [
-    "2000433",
-    "2000719",
-    "2000887",
-    "2001036",
-    "2001221",
-    "2001566",
-    "2001580",
-    "2001620",
-    "2001627",
-    "2001685",
-    "2001862",
-    "2001863",
-    "2001864",
-    "2001865",
-    "2001866",
-    "2001915",
-    "2001916",
-    "2001917",
-    "2001943",
-    "2001980",
-  ];
-  
-  export default asteroidIds;
-  
+const asteroidFunFacts = [
+  "Asteroids: Echoes of the Solar System's Birth.",
+  "Exploring the Cosmos: One Asteroid at a Time.",
+  "Celestial Gems: Unveiling the Secrets of Asteroids.",
+  "Cosmic Detectives: Tracking Asteroids in Space.",
+  "Asteroids: Time Capsules of the Early Solar System.",
+  "Stargazing Marvels: The Wonders of Asteroids.",
+  "Journey to the Stars: Asteroids in the Celestial Ballet.",
+  "Asteroids: Building Blocks of Planetary Evolution.",
+  "Unraveling Mysteries: Asteroids' Role in Space History.",
+  "Cosmic Search: Navigating the Asteroid Frontier.",
+];
+export default asteroidFunFacts;

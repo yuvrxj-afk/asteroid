@@ -9,7 +9,6 @@ import {
   Toolbar,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-// import asteroidBg from "../assets/asteroidBg.jpg";
 import bgVideo from "../assets/asteroid.mp4";
 import axios from "axios";
 import Search from "./search/Search";
@@ -80,17 +79,17 @@ const Asteroid: React.FC = () => {
   }
 
   const handleSearch = (searchId: string) => {
-    setLoading(true)
+    setLoading(true);
     navigate(`/details/${searchId}`);
     console.log("nothing");
   };
 
   const bgStyling = {
-    // backgroundImage: `url(${asteroidBg})`,
-    backgroundSize: "100% 100%",
+    background: `rgba(0, 0, 0, 0.4)`,
     minHeight: "100vh",
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
     objectFit: "cover",
     minWidth: "100vw",
     position: "relative",
@@ -98,7 +97,8 @@ const Asteroid: React.FC = () => {
   };
 
   const panelStyling = {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "rgba(240, 240, 240, 0.2)",
+    color: "white",
     padding: "16px",
     borderRadius: "8px",
     maxHeight: "50vh",
@@ -113,11 +113,17 @@ const Asteroid: React.FC = () => {
       </div>
 
       {/* Top Search Bar */}
-      <AppBar color="secondary" enableColorOnDark>
+      <AppBar
+        color="secondary"
+        enableColorOnDark
+        sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
+      >
         <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
-          <Typography variant="h6" fontWeight={"bolder"}>
-            Cosmic Search
-          </Typography>
+          <div onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
+            <Typography variant="h3" fontWeight={"bolder"}>
+              Cosmic Search
+            </Typography>
+          </div>
           <Search onSearch={handleSearch} />
         </Toolbar>
       </AppBar>

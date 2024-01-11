@@ -4,7 +4,7 @@ const theme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#424242", // Dark grey
+      main: "#000", // Dark grey
     },
     secondary: {
       main: "#757575", // Medium grey
@@ -14,8 +14,8 @@ const theme = createTheme({
       paper: "#FFFFFF", // White paper background
     },
     text: {
-      primary: "#212121", // Dark text color
-      secondary: "#757575", // Medium text color
+      primary: "#F5F5F5", // Dark text color
+      secondary: "#000", // Medium text color
     },
   },typography:{
     fontFamily:'Poppins , sans serif',
