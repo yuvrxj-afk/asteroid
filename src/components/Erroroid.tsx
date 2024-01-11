@@ -24,6 +24,7 @@ const Erroroid: React.FC = () => {
   };
 
   return (
+    
     <Container sx={containerStyle}>
       <Typography variant="h5" color="error" mt={2}>
         Oops! You're lost.

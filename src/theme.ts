@@ -2,25 +2,25 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    mode: "light",
     primary: {
-      main: "#000", // Dark grey
+      main: "#F7F7F7", // Off-white
     },
     secondary: {
-      main: "#757575", // Medium grey
+      main: "#ECECEC", // Light gray
     },
     background: {
-      default: "#F5F5F5", // Light grey background
-      paper: "#FFFFFF", // White paper background
+      default: "#FFFFFF", // White
+      paper: "#F0F0F0", // Light gray background
     },
     text: {
-      primary: "#F5F5F5", // Dark text color
-      secondary: "#000", // Medium text color
+      primary: "#F&F7F7", // Dark gray text
+      secondary: "#F7F7F7", // Medium gray text
     },
-  },typography:{
-    fontFamily:'Poppins , sans serif',
-    fontWeightBold:'bold' 
-  }
+  },
+  typography: {
+    fontFamily: 'Poppins, sans-serif',
+    fontWeightBold: 'bold',
+  },
 });
 
 export default theme;

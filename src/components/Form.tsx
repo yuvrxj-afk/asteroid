@@ -71,6 +71,22 @@ const Form: FC<FormProps> = () => {
     setAsteroidId(e.target.value);
   };
 
+  const containerStyle = {
+    border: "2px solid #313131",
+    borderRadius: "8px",
+    padding: "20px",
+    marginTop: "24px",
+    textAlign: "center",
+    position: "relative",
+    zIndex: "1",
+    background: `rgba(0, 0, 0, 0.53)`,
+    color: "white",
+    minHeight: "300px", // Adjust the minHeight as needed
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-around",
+  };
+
   return (
     <>
       <div className="Asteroid-video-container">
@@ -82,12 +98,15 @@ const Form: FC<FormProps> = () => {
         enableColorOnDark
         sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
       >
-        <Toolbar
-         sx={{ padding:'4rem', marginLeft:'1rem'}}
-        >
+        <Toolbar sx={{ padding: "4rem", marginLeft: "1rem" }}>
           <div
             onClick={() => navigate("/")}
-            style={{ cursor: "pointer", fontSize: "3em" , fontWeight:'bolder' , color:'lightgray' }}
+            style={{
+              cursor: "pointer",
+              fontSize: "3em",
+              fontWeight: "bolder",
+              color: "lightgray",
+            }}
           >
             <Typewriter
               loop
@@ -102,20 +121,7 @@ const Form: FC<FormProps> = () => {
         </Toolbar>
       </AppBar>
 
-      <Container
-        maxWidth="sm"
-        sx={{
-          border: "2px solid #000",
-          borderRadius: "8px",
-          padding: "16px",
-          marginTop: "24px",
-          textAlign: "center",
-          position: "relative",
-          zIndex: "1",
-          background: `rgba(0, 0, 0, 0.4)`,
-          color: "white",
-        }}
-      >
+      <Container maxWidth="sm" sx={containerStyle}>
         <Grid container spacing={2} justifyContent="center" alignItems="center">
           <Grid item xs={12}>
             <Typography
@@ -135,10 +141,12 @@ const Form: FC<FormProps> = () => {
                 <Grid item xs={9}>
                   <TextField
                     variant="outlined"
-                    placeholder="Enter ID"
+                    label="Enter Asteroid ID"
                     fullWidth
                     autoFocus
-                    sx={{ padding: "7px" }}
+                    inputProps={{
+                      style: { color: "white" },
+                    }}
                     value={asteroidId}
                     onChange={handleInputChange}
                   />

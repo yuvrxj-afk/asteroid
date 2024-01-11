@@ -11,7 +11,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import bgVideo from "../assets/asteroid.mp4";
 import axios from "axios";
-import Search from "./search/Search";
+import Search from "./Search";
 
 interface apiResponseType {
   id: string;
@@ -120,7 +120,7 @@ const Asteroid: React.FC = () => {
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
           <div onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-            <Typography variant="h3" fontWeight={"bolder"}>
+            <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
               Cosmic Search
             </Typography>
           </div>
