@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import {
   Typography,
   Container,
@@ -8,173 +8,147 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import bgVideo from "../assets/asteroid.mp4";
-import axios from "axios";
 import Search from "./Search";
 
-interface apiResponseType {
-  id: string;
-  name: string;
-  name_limited?: string;
-  absolute_magnitude_h?: number;
-  is_potentially_hazardous_asteroid?: boolean;
-  estimated_diameter?: {
-    kilometers: {
-      estimated_diameter_min: number;
-      estimated_diameter_max: number;
-    };
-    miles: {
-      estimated_diameter_min: number;
-      estimated_diameter_max: number;
+interface AsteroidProps {
+  asteroidData: {
+    id: string;
+    name: string;
+    name_limited?: string;
+    absolute_magnitude_h?: number;
+    is_potentially_hazardous_asteroid?: boolean;
+    estimated_diameter?: {
+      kilometers: {
+        estimated_diameter_min: number;
+        estimated_diameter_max: number;
+      };
+      miles: {
+        estimated_diameter_min: number;
+        estimated_diameter_max: number;
+      };
     };
   };
+  loading: boolean;
 }
 
-const Asteroid: React.FC = () => {
-  const { asteroidId } = useParams();
+class Asteroid extends React.Component<AsteroidProps> {
+  navigate = useNavigate();
 
-  const navigate = useNavigate();
+  handleSearch = (searchId: string) => {
+    this.navigate(`/details/${searchId}`);
+  };
 
-  const [apiResponse, setApiResponse] = React.useState<apiResponseType>();
+  render() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const location = useLocation();
+    const asteroidData = location.state?.asteroidData || null;
+    const loading = this.props.loading;
 
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [error, setError] = React.useState<boolean>(false);
+    // const { asteroidData, loading } = this.props;
 
-  const API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
+    const bgStyling = {
+      background: `rgba(0, 0, 0, 0.4)`,
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      objectFit: "cover",
+      minWidth: "100vw",
+      position: "relative",
+      zIndex: "2",
+    };
 
-  //   fetch logic
-  const fetchData = useCallback(
-    async (id: string) => {
-      try {
-        const response = await axios.get(
-          `https://api.nasa.gov/neo/rest/v1/neo/${id}?api_key=${API_KEY}`
-        );
-        if (!response.data) {
-          setError(true);
-          throw new Error(
-            `request failed with status code : ${response.status}`
-          );
-          return;
-        }
-        // console.log(response.data);
-        setApiResponse(response.data);
-      } catch (error) {
-        setError(true);
-        console.log("Error while fetching : ", error);
-      } finally {
-        setLoading(false);
-      }
-    },
-    [API_KEY]
-  );
+    const panelStyling = {
+      backgroundColor: "rgba(240, 240, 240, 0.2)",
+      color: "white",
+      padding: "16px",
+      borderRadius: "8px",
+      maxHeight: "50vh",
+      top: "0px",
+    };
 
-  useEffect(() => {
-    fetchData(asteroidId || "");
-  }, [asteroidId, fetchData]);
+    return (
+      <>
+        {/* video container */}
+        <div className="Asteroid-video-container">
+          <video autoPlay loop muted className="asteroid-video" src={bgVideo} />
+        </div>
 
-  if (error) {
-    navigate("/not-found");
-    setError(false);
+        {/* Top Search Bar */}
+        <AppBar
+          color="secondary"
+          enableColorOnDark
+          sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
+        >
+          <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
+            <div
+              onClick={() => this.navigate("/")}
+              style={{ cursor: "pointer" }}
+            >
+              <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
+                Cosmic Search
+              </Typography>
+            </div>
+            <Search onSearch={this.handleSearch} />
+          </Toolbar>
+        </AppBar>
+
+        {/* Main container */}
+        <Container sx={bgStyling}>
+          {loading && (
+            <Backdrop
+              open={loading}
+              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            >
+              <CircularProgress color="inherit" />
+            </Backdrop>
+          )}
+          {/* Returning the API Response */}
+          {asteroidData && (
+            <Paper sx={panelStyling}>
+              <Typography variant="h4" mb={2} fontWeight={"bold"}>
+                Asteroid Information
+              </Typography>
+              <Typography>ID : {asteroidData.id}</Typography>
+              <Typography>Name : {asteroidData.name}</Typography>
+              <Typography>
+                Name (Limited): {asteroidData.name_limited}
+              </Typography>
+              <Typography>
+                Absolute Magnitude (H): {asteroidData.absolute_magnitude_h}
+              </Typography>
+              <Typography>
+                Is Potentially Hazardous Asteroid:
+                {asteroidData.is_potentially_hazardous_asteroid ? "Yes" : "No"}
+              </Typography>
+              <Typography>
+                Estimated Diameter (km):
+                {
+                  asteroidData.estimated_diameter?.kilometers
+                    ?.estimated_diameter_min
+                }
+                -
+                {
+                  asteroidData.estimated_diameter?.kilometers
+                    ?.estimated_diameter_max
+                }
+              </Typography>
+              <Typography>
+                Estimated Diameter (miles):
+                {
+                  asteroidData.estimated_diameter?.miles?.estimated_diameter_min
+                }{" "}
+                -
+                {asteroidData.estimated_diameter?.miles?.estimated_diameter_max}
+              </Typography>
+            </Paper>
+          )}
+        </Container>
+      </>
+    );
   }
+}
 
-  const handleSearch = (searchId: string) => {
-    setLoading(true);
-    navigate(`/details/${searchId}`);
-    console.log("nothing");
-  };
-
-  const bgStyling = {
-    background: `rgba(0, 0, 0, 0.4)`,
-    minHeight: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    objectFit: "cover",
-    minWidth: "100vw",
-    position: "relative",
-    zIndex: "2",
-  };
-
-  const panelStyling = {
-    backgroundColor: "rgba(240, 240, 240, 0.2)",
-    color: "white",
-    padding: "16px",
-    borderRadius: "8px",
-    maxHeight: "50vh",
-    top: "0px",
-  };
-
-  return (
-    <>
-      {/* video container */}
-      <div className="Asteroid-video-container">
-        <video autoPlay loop muted src={bgVideo} className="asteroid-video" />
-      </div>
-
-      {/* Top Search Bar */}
-      <AppBar
-        color="secondary"
-        enableColorOnDark
-        sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
-      >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
-          <div onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
-            <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
-              Cosmic Search
-            </Typography>
-          </div>
-          <Search onSearch={handleSearch} />
-        </Toolbar>
-      </AppBar>
-
-      {/* Main container */}
-      <Container sx={bgStyling}>
-        {loading && (
-          <Backdrop
-            open={loading}
-            sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          >
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        )}
-        {/* Returning the API Response */}
-        {!loading && apiResponse && (
-          <Paper sx={panelStyling}>
-            <Typography variant="h4" mb={2} fontWeight={"bold"}>
-              Asteroid Information
-            </Typography>
-            <Typography>ID : {apiResponse.id}</Typography>
-            <Typography>Name : {apiResponse.name}</Typography>
-            <Typography>Name (Limited): {apiResponse.name_limited}</Typography>
-            <Typography>
-              Absolute Magnitude (H): {apiResponse.absolute_magnitude_h}
-            </Typography>
-            <Typography>
-              Is Potentially Hazardous Asteroid:
-              {apiResponse.is_potentially_hazardous_asteroid ? "Yes" : "No"}
-            </Typography>
-            <Typography>
-              Estimated Diameter (km):
-              {
-                apiResponse.estimated_diameter?.kilometers
-                  ?.estimated_diameter_min
-              }
-              -
-              {
-                apiResponse.estimated_diameter?.kilometers
-                  ?.estimated_diameter_max
-              }
-            </Typography>
-            <Typography>
-              Estimated Diameter (miles):
-              {apiResponse.estimated_diameter?.miles?.estimated_diameter_min} -
-              {apiResponse.estimated_diameter?.miles?.estimated_diameter_max}
-            </Typography>
-          </Paper>
-        )}
-      </Container>
-    </>
-  );
-};
 export default Asteroid;
