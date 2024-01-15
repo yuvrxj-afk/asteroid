@@ -10,14 +10,12 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import bgVideo from "../assets/asteroid.mp4";
-// import axios from "axios";
 import { Typewriter } from "react-simple-typewriter";
 import asteroidFunFacts from "../constant/asteroid";
 import withRouter from "./withRouter";
 
 interface FormState {
   asteroidId: string;
-  asteroid: any;
   error: boolean;
 }
 
@@ -30,19 +28,8 @@ class Form extends Component<FormProps, FormState> {
     super(props);
     this.state = {
       asteroidId: "",
-      asteroid: null,
       error: false,
     };
-  }
-
-  _isMounted = false;
-
-  componentDidMount() {
-    this._isMounted = true;
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
   }
 
   API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
@@ -59,12 +46,7 @@ class Form extends Component<FormProps, FormState> {
         throw new Error(`request failed with status code : ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
-      if (this._isMounted) {
-        this.setState({
-          asteroid: data,
-        });
-      }
+
       this.props.navigate("/details", { state: data });
     } catch (error) {
       console.log("Error while fetching : ", error);
@@ -90,9 +72,6 @@ class Form extends Component<FormProps, FormState> {
       console.log(data);
       const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
-      if (this._isMounted) {
-        this.setState({ asteroid: data.near_earth_objects[number] });
-      }
       this.props.navigate(`/details`, {
         state: data.near_earth_objects[number],
       });

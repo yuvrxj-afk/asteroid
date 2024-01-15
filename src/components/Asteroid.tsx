@@ -1,67 +1,29 @@
 import React from "react";
-import {
-  Typography,
-  Container,
-  Paper,
-  Backdrop,
-  CircularProgress,
-  AppBar,
-  Toolbar,
-} from "@mui/material";
-// import { useLocation } from "react-router-dom";
+import { Typography, Container, Paper, AppBar, Toolbar } from "@mui/material";
 import bgVideo from "../assets/asteroid.mp4";
-import { useLocation } from "react-router-dom";
+import withRouter from "./withRouter";
 
-interface AsteroidProps {
-  asteroidData: {
-    id: string;
-    name: string;
-    name_limited?: string;
-    absolute_magnitude_h?: number;
-    is_potentially_hazardous_asteroid?: boolean;
-    estimated_diameter?: {
-      kilometers: {
-        estimated_diameter_min: number;
-        estimated_diameter_max: number;
-      };
-      miles: {
-        estimated_diameter_min: number;
-        estimated_diameter_max: number;
-      };
+interface asteroidProps {
+  id: string;
+  name: string;
+  name_limited?: string;
+  absolute_magnitude_h?: number;
+  is_potentially_hazardous_asteroid?: boolean;
+  estimated_diameter?: {
+    kilometers: {
+      estimated_diameter_min: number;
+      estimated_diameter_max: number;
+    };
+    miles: {
+      estimated_diameter_min: number;
+      estimated_diameter_max: number;
     };
   };
-  loading: boolean;
 }
-const dummyData: AsteroidProps = {
-  asteroidData: {
-    id: "1",
-    name: "Dummy Asteroid",
-    name_limited: "fsd",
-    absolute_magnitude_h: 3,
-    is_potentially_hazardous_asteroid: false,
-    estimated_diameter: {
-      kilometers: {
-        estimated_diameter_min: 32,
-        estimated_diameter_max: 3,
-      },
-
-      miles: {
-        estimated_diameter_min: 0.5,
-        estimated_diameter_max: 1.0,
-      },
-    },
-  },
-  loading: false,
-};
 
 class Asteroid extends React.Component {
   render() {
-    // const { location } = this.props;
-    // const location = useLocation();
-    console.log(location);
-    console.log(this.props);
-    const { asteroidData, loading } = dummyData;
-
+    const asteroidData: asteroidProps = this.props.location.state;
     const bgStyling = {
       background: `rgba(0, 0, 0, 0.4)`,
       minHeight: "100vh",
@@ -94,7 +56,11 @@ class Asteroid extends React.Component {
         <AppBar
           color="secondary"
           enableColorOnDark
-          sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
+          sx={{
+            background: "rgba(255, 255, 255, 0.0)",
+            marginTop: "20px",
+            boxShadow: "none",
+          }}
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
             <div
@@ -111,14 +77,6 @@ class Asteroid extends React.Component {
 
         {/* Main container */}
         <Container sx={bgStyling}>
-          {loading && (
-            <Backdrop
-              open={loading}
-              sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            >
-              <CircularProgress color="inherit" />
-            </Backdrop>
-          )}
           {/* Returning the API Response */}
           {asteroidData && (
             <Paper sx={panelStyling}>
@@ -165,4 +123,4 @@ class Asteroid extends React.Component {
   }
 }
 
-export default Asteroid;
+export default withRouter(Asteroid);
