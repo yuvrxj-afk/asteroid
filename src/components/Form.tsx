@@ -13,6 +13,8 @@ import bgVideo from "../assets/asteroid.mp4";
 import { Typewriter } from "react-simple-typewriter";
 import asteroidFunFacts from "../constant/asteroid";
 import withRouter from "./withRouter";
+import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 interface FormState {
   asteroidId: string;
@@ -38,37 +40,40 @@ class Form extends Component<FormProps, FormState> {
     e.preventDefault();
 
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `https://api.nasa.gov/neo/rest/v1/neo/${this.state.asteroidId}?api_key=${this.API_KEY}`
       );
 
-      if (!response.ok) {
+      if (!response.data) {
+        this.setState({
+          error: true,
+        });
         throw new Error(`request failed with status code : ${response.status}`);
       }
-      const data = await response.json();
+      const data = await response.data;
 
       this.props.navigate("/details", { state: data });
     } catch (error) {
-      console.log("Error while fetching : ", error);
+      toast.error(`Error: ${error}`);
     } finally {
       try {
-        this.setState({ asteroidId: "" });
+        // this.setState({ asteroidId: "" });
       } catch (error) {
-        console.log("Error (Form) : ", error);
+        toast.error(`Error: ${error}`);
       }
     }
   };
 
   handleRandomData = async () => {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
       );
 
-      if (!response.ok) {
-        throw new Error(`Error with status code ${response.status}`);
+      if (!response.data) {
+        toast.error(`Error: ${response.status}`);
       }
-      const data = await response.json();
+      const data = await response.data;
       console.log(data);
       const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
@@ -76,7 +81,7 @@ class Form extends Component<FormProps, FormState> {
         state: data.near_earth_objects[number],
       });
     } catch (error) {
-      throw new Error(`${error}`);
+      toast.error(`Error: ${error}`);
     }
   };
 
@@ -108,7 +113,7 @@ class Form extends Component<FormProps, FormState> {
         <div className="Asteroid-video-container">
           <video autoPlay loop muted src={bgVideo} className="asteroid-video" />
         </div>
-
+        <Toaster />
         <AppBar
           color="secondary"
           enableColorOnDark
@@ -170,6 +175,7 @@ class Form extends Component<FormProps, FormState> {
                       fullWidth
                       type="number"
                       autoFocus
+                      SelectProps={{ IconComponent: () => null }}
                       inputProps={{
                         style: { color: "white" },
                       }}

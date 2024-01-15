@@ -2,8 +2,10 @@ import React from "react";
 import { Typography, Container, Paper, AppBar, Toolbar } from "@mui/material";
 import bgVideo from "../assets/asteroid.mp4";
 import withRouter from "./withRouter";
+import { RouteComponentProps } from "react-router-dom";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
-interface asteroidProps {
+interface asteroidProps extends RouteComponentProps {
   id: string;
   name: string;
   name_limited?: string;
@@ -21,9 +23,9 @@ interface asteroidProps {
   };
 }
 
-class Asteroid extends React.Component {
+class Asteroid extends React.Component<asteroidProps> {
   render() {
-    const asteroidData: asteroidProps = this.props.location.state;
+    const asteroidData = this.props.location.state as asteroidProps;
     const bgStyling = {
       background: `rgba(0, 0, 0, 0.4)`,
       minHeight: "100vh",
@@ -68,6 +70,7 @@ class Asteroid extends React.Component {
               style={{ cursor: "pointer" }}
             >
               <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
+                <ArrowBackIosIcon fontSize="large" />
                 Go Back
               </Typography>
             </div>
