@@ -37,29 +37,6 @@ class Form extends Component<FormProps, FormState> {
 
   API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
-  handleRandomData = async () => {
-    try {
-      const response = await fetch(
-        `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error with status code ${response.status}`);
-      }
-      const data = await response.json();
-
-      const number = Math.floor(Math.random() * data.near_earth_objects.length);
-
-      this.setState({ asteroid: data.near_earth_objects[number] });
-
-      this.props.navigate(`/details`, {
-        state: data.near_earth_objects[number],
-      });
-    } catch (error) {
-      throw new Error(`${error}`);
-    }
-  };
-
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -84,6 +61,29 @@ class Form extends Component<FormProps, FormState> {
       } catch (error) {
         console.log("Error (Form) : ", error);
       }
+    }
+  };
+
+  handleRandomData = async () => {
+    try {
+      const response = await fetch(
+        `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error with status code ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      const number = Math.floor(Math.random() * data.near_earth_objects.length);
+
+      this.setState({ asteroid: data.near_earth_objects[number] });
+
+      this.props.navigate(`/details`, {
+        state: data.near_earth_objects[number],
+      });
+    } catch (error) {
+      throw new Error(`${error}`);
     }
   };
 
