@@ -13,7 +13,7 @@ import bgVideo from "../assets/asteroid.mp4";
 // import axios from "axios";
 import { Typewriter } from "react-simple-typewriter";
 import asteroidFunFacts from "../constant/asteroid";
-import withRouter from "../withRouter";
+import withRouter from "./withRouter";
 
 interface FormState {
   asteroidId: string;
@@ -35,6 +35,16 @@ class Form extends Component<FormProps, FormState> {
     };
   }
 
+  _isMounted = false;
+
+  componentDidMount() {
+    this._isMounted = true;
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
   handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -49,9 +59,12 @@ class Form extends Component<FormProps, FormState> {
         throw new Error(`request failed with status code : ${response.status}`);
       }
       const data = await response.json();
-      this.setState({
-        asteroid: data,
-      });
+      console.log(data);
+      if (this._isMounted) {
+        this.setState({
+          asteroid: data,
+        });
+      }
       this.props.navigate("/details", { state: data });
     } catch (error) {
       console.log("Error while fetching : ", error);
@@ -77,8 +90,9 @@ class Form extends Component<FormProps, FormState> {
       console.log(data);
       const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
-      this.setState({ asteroid: data.near_earth_objects[number] });
-
+      if (this._isMounted) {
+        this.setState({ asteroid: data.near_earth_objects[number] });
+      }
       this.props.navigate(`/details`, {
         state: data.near_earth_objects[number],
       });

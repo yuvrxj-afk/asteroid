@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 // import { useLocation } from "react-router-dom";
 import bgVideo from "../assets/asteroid.mp4";
+import { useLocation } from "react-router-dom";
 
 interface AsteroidProps {
   asteroidData: {
@@ -56,6 +57,7 @@ const dummyData: AsteroidProps = {
 class Asteroid extends React.Component {
   render() {
     // const { location } = this.props;
+    // const location = useLocation();
     console.log(location);
     console.log(this.props);
     const { asteroidData, loading } = dummyData;
