@@ -18,7 +18,6 @@ import axios from "axios";
 
 interface FormState {
   asteroidId: string;
-  error: boolean;
 }
 
 interface FormProps {
@@ -30,7 +29,6 @@ class Form extends Component<FormProps, FormState> {
     super(props);
     this.state = {
       asteroidId: "",
-      error: false,
     };
   }
 
@@ -45,10 +43,7 @@ class Form extends Component<FormProps, FormState> {
       );
 
       if (!response.data) {
-        this.setState({
-          error: true,
-        });
-        throw new Error(`request failed with status code : ${response.status}`);
+        toast.error(`Error: ${response.status}`);
       }
       const data = await response.data;
 
