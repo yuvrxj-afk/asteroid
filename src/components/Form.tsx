@@ -9,50 +9,52 @@ import {
   AppBar,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-// import { useNavigate } from "react-router-dom";
 import bgVideo from "../assets/asteroid.mp4";
-import axios from "axios";
+// import axios from "axios";
 import { Typewriter } from "react-simple-typewriter";
 import asteroidFunFacts from "../constant/asteroid";
-import { useNavigate } from "react-router-dom";
+import withRouter from "../withRouter";
 
 interface FormState {
   asteroidId: string;
+  asteroid: any;
+  error: boolean;
 }
 
-class Form extends Component<{}, FormState> {
-  navigate = useNavigate();
-  constructor(props: object) {
+interface FormProps {
+  navigate: (url: string, any: any) => void;
+}
+
+class Form extends Component<FormProps, FormState> {
+  constructor(props: any) {
     super(props);
     this.state = {
       asteroidId: "",
+      asteroid: null,
+      error: false,
     };
-
-    // this.navigate = useNavigate();
   }
 
   API_KEY = "xdVSbTOn9TfSpyT5sdjdiNFFR3JhTKNlzmv7y70p";
 
   handleRandomData = async () => {
     try {
-      const response = await axios.get(
+      const response = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
       );
 
-      if (!response.data) {
+      if (!response.ok) {
         throw new Error(`Error with status code ${response.status}`);
       }
+      const data = await response.json();
 
-      const dataArray = response.data.near_earth_objects.map((i) => i.id);
-      const number = Math.floor(Math.random() * 20);
-      console.log(dataArray[number]);
-      this.navigate(`/details/${dataArray[number]}`, { state: dataArray });
-      // const url = ?state=${encodeURIComponent(
-      // JSON.stringify({ asteroidData: response.data })
-      // )}`;
+      const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
-      // window.location.href = url;
-      // this.navigate(`/details/${dataArray[number]}`, { state: dataArray });
+      this.setState({ asteroid: data.near_earth_objects[number] });
+
+      this.props.navigate(`/details`, {
+        state: data.near_earth_objects[number],
+      });
     } catch (error) {
       throw new Error(`${error}`);
     }
@@ -62,18 +64,18 @@ class Form extends Component<{}, FormState> {
     e.preventDefault();
 
     try {
-      const response = await axios.get(
+      const response = await fetch(
         `https://api.nasa.gov/neo/rest/v1/neo/${this.state.asteroidId}?api_key=${this.API_KEY}`
       );
 
-      if (!response.data) {
+      if (!response.ok) {
         throw new Error(`request failed with status code : ${response.status}`);
       }
-      const url = `/details/${this.state.asteroidId}?state=${encodeURIComponent(
-        JSON.stringify({ asteroidData: response.data })
-      )}`;
-
-      window.location.href = url;
+      const data = await response.json();
+      this.setState({
+        asteroid: data,
+      });
+      this.props.navigate("/details", { state: data });
     } catch (error) {
       console.log("Error while fetching : ", error);
     } finally {
@@ -117,7 +119,11 @@ class Form extends Component<{}, FormState> {
         <AppBar
           color="secondary"
           enableColorOnDark
-          sx={{ background: "rgba(255, 255, 255, 0.0)", marginTop: "20px" }}
+          sx={{
+            background: "rgba(255, 255, 255, 0.0)",
+            marginTop: "20px",
+            boxShadow: "none",
+          }}
         >
           <Toolbar sx={{ padding: "4rem", marginLeft: "1rem" }}>
             <div
@@ -209,4 +215,4 @@ class Form extends Component<{}, FormState> {
   }
 }
 
-export default Form;
+export default withRouter(Form);

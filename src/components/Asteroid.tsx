@@ -8,9 +8,8 @@ import {
   AppBar,
   Toolbar,
 } from "@mui/material";
-import { useLocation, useNavigate } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 import bgVideo from "../assets/asteroid.mp4";
-import Search from "./Search";
 
 interface AsteroidProps {
   asteroidData: {
@@ -32,21 +31,34 @@ interface AsteroidProps {
   };
   loading: boolean;
 }
+const dummyData: AsteroidProps = {
+  asteroidData: {
+    id: "1",
+    name: "Dummy Asteroid",
+    name_limited: "fsd",
+    absolute_magnitude_h: 3,
+    is_potentially_hazardous_asteroid: false,
+    estimated_diameter: {
+      kilometers: {
+        estimated_diameter_min: 32,
+        estimated_diameter_max: 3,
+      },
 
-class Asteroid extends React.Component<AsteroidProps> {
-  navigate = useNavigate();
+      miles: {
+        estimated_diameter_min: 0.5,
+        estimated_diameter_max: 1.0,
+      },
+    },
+  },
+  loading: false,
+};
 
-  handleSearch = (searchId: string) => {
-    this.navigate(`/details/${searchId}`);
-  };
-
+class Asteroid extends React.Component {
   render() {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const location = useLocation();
-    const asteroidData = location.state?.asteroidData || null;
-    const loading = this.props.loading;
-
-    // const { asteroidData, loading } = this.props;
+    // const { location } = this.props;
+    console.log(location);
+    console.log(this.props);
+    const { asteroidData, loading } = dummyData;
 
     const bgStyling = {
       background: `rgba(0, 0, 0, 0.4)`,
@@ -84,14 +96,14 @@ class Asteroid extends React.Component<AsteroidProps> {
         >
           <Toolbar sx={{ display: "flex", justifyContent: "space-around" }}>
             <div
-              onClick={() => this.navigate("/")}
+              onClick={() => (window.location.href = "/")}
               style={{ cursor: "pointer" }}
             >
               <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
-                Cosmic Search
+                Go Back
               </Typography>
             </div>
-            <Search onSearch={this.handleSearch} />
+            {/* <Search onSearch={this.handleSearch} /> */}
           </Toolbar>
         </AppBar>
 

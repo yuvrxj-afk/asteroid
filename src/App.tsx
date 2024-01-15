@@ -3,16 +3,36 @@ import Form from "./components/Form";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Asteroid from "./components/Asteroid";
 
-class App extends React.Component {
-  render(): React.ReactNode {
+interface AppProps {
+  navigate: () => void;
+}
+
+interface AppState {
+  navigator: number;
+  redirect: boolean;
+}
+
+class App extends React.Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    this.state = {
+      navigator: 0,
+      redirect: false,
+    };
+  }
+
+  componentDidMount(): void {
+    setTimeout(() => {
+      this.setState({ redirect: true });
+    }, this.state.navigator);
+  }
+
+  render() {
     return (
       <Router>
         <Routes>
           <Route path="/" element={<Form />} />
-          <Route
-            path="/details/:asteroidId"
-            element={<Asteroid asteroidData={window.location.href} loading={false} />}
-          />
+          <Route path="/details" element={<Asteroid />} />
         </Routes>
       </Router>
     );
@@ -20,18 +40,3 @@ class App extends React.Component {
 }
 
 export default App;
-// /* eslint-disable @typescript-eslint/no-explicit-any */
-// import { useLocation, useNavigate, useParams } from "react-router-dom";
-
-// const withRouter = (Component: React.ComponentType<any>) => {
-//   const WithRouter = (props: any) => {
-//     const location = useLocation();
-//     const navigate = useNavigate();
-//     const params = useParams();
-//     return <Component {...props} location={location} navigate={navigate} params={params} />;
-//   }
-//   return WithRouter;
-// }
-
-
-// export default withRouter
