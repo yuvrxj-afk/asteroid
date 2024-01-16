@@ -1,0 +1,14 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+      "jsx": "react-jsx",
+      "esModuleInterop": true,
+      "allowJs": true
+    },
+    "include": [
+      "src/**/*.test.ts",
+      "src/setupTests.ts"
+    ]
+    // ,"exclude": ["node_modules"]
+  }
+  
