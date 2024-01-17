@@ -1,12 +1,12 @@
-import React from "react";
+import { Component } from "react";
 import { Typography, Container, Paper, AppBar, Toolbar } from "@mui/material";
 import bgVideo from "../assets/asteroid.mp4";
 import withRouter from "./withRouter";
-import { RouteComponentProps } from "react-router-dom";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-interface asteroidProps extends RouteComponentProps {
+interface asteroidProps {
   id: string;
+  location: any;
   name: string;
   name_limited?: string;
   absolute_magnitude_h?: number;
@@ -23,9 +23,11 @@ interface asteroidProps extends RouteComponentProps {
   };
 }
 
-class Asteroid extends React.Component<asteroidProps> {
+class Asteroid extends Component<asteroidProps> {
   render() {
     const asteroidData = this.props.location.state as asteroidProps;
+    // console.log(this.props);
+    // console.log(location);
     const bgStyling = {
       background: `rgba(0, 0, 0, 0.4)`,
       minHeight: "100vh",
@@ -68,6 +70,7 @@ class Asteroid extends React.Component<asteroidProps> {
             <div
               onClick={() => (window.location.href = "/")}
               style={{ cursor: "pointer" }}
+              data-testid="homeClick"
             >
               <Typography variant="h3" color={"white"} fontWeight={"bolder"}>
                 <ArrowBackIosIcon fontSize="large" />

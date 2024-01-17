@@ -15,6 +15,7 @@ import asteroidFunFacts from "../constant/asteroid";
 import withRouter from "./withRouter";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import "../index.css";
 
 interface FormState {
   asteroidId: string;
@@ -50,12 +51,6 @@ class Form extends Component<FormProps, FormState> {
       this.props.navigate("/details", { state: data });
     } catch (error) {
       toast.error(`Error: ${error}`);
-    } finally {
-      try {
-        // this.setState({ asteroidId: "" });
-      } catch (error) {
-        toast.error(`Error: ${error}`);
-      }
     }
   };
 
