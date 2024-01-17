@@ -64,7 +64,6 @@ class Form extends Component<FormProps, FormState> {
         toast.error(`Error: ${response.status}`);
       }
       const data = await response.data;
-      console.log(data);
       const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
       this.props.navigate(`/details`, {
