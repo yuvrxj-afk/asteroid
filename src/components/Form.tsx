@@ -121,6 +121,7 @@ class Form extends Component<FormProps, FormState> {
                 fontWeight: "bolder",
                 color: "lightgray",
               }}
+              data-testid = "homeClick"
             >
               <Typewriter
                 loop
@@ -164,7 +165,6 @@ class Form extends Component<FormProps, FormState> {
                       fullWidth
                       type="number"
                       autoFocus
-                      SelectProps={{ IconComponent: () => null }}
                       inputProps={{
                         style: { color: "white" },
                       }}

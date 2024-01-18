@@ -26,8 +26,6 @@ interface asteroidProps {
 class Asteroid extends Component<asteroidProps> {
   render() {
     const asteroidData = this.props.location.state as asteroidProps;
-    // console.log(this.props);
-    // console.log(location);
     const bgStyling = {
       background: `rgba(0, 0, 0, 0.4)`,
       minHeight: "100vh",
@@ -84,45 +82,39 @@ class Asteroid extends Component<asteroidProps> {
         {/* Main container */}
         <Container sx={bgStyling}>
           {/* Returning the API Response */}
-          {asteroidData && (
-            <Paper sx={panelStyling}>
-              <Typography variant="h4" mb={2} fontWeight={"bold"}>
-                Asteroid Information
-              </Typography>
-              <Typography>ID : {asteroidData.id}</Typography>
-              <Typography>Name : {asteroidData.name}</Typography>
-              <Typography>
-                Name (Limited): {asteroidData.name_limited}
-              </Typography>
-              <Typography>
-                Absolute Magnitude (H): {asteroidData.absolute_magnitude_h}
-              </Typography>
-              <Typography>
-                Is Potentially Hazardous Asteroid:
-                {asteroidData.is_potentially_hazardous_asteroid ? "Yes" : "No"}
-              </Typography>
-              <Typography>
-                Estimated Diameter (km):
-                {
-                  asteroidData.estimated_diameter?.kilometers
-                    ?.estimated_diameter_min
-                }
-                -
-                {
-                  asteroidData.estimated_diameter?.kilometers
-                    ?.estimated_diameter_max
-                }
-              </Typography>
-              <Typography>
-                Estimated Diameter (miles):
-                {
-                  asteroidData.estimated_diameter?.miles?.estimated_diameter_min
-                }{" "}
-                -
-                {asteroidData.estimated_diameter?.miles?.estimated_diameter_max}
-              </Typography>
-            </Paper>
-          )}
+
+          <Paper sx={panelStyling}>
+            <Typography variant="h4" mb={2} fontWeight={"bold"}>
+              Asteroid Information
+            </Typography>
+            <Typography>ID : {asteroidData.id}</Typography>
+            <Typography>Name : {asteroidData.name}</Typography>
+            <Typography>Name (Limited): {asteroidData.name_limited}</Typography>
+            <Typography>
+              Absolute Magnitude (H): {asteroidData.absolute_magnitude_h}
+            </Typography>
+            <Typography>
+              Is Potentially Hazardous Asteroid:
+              {asteroidData.is_potentially_hazardous_asteroid ? "Yes" : "No"}
+            </Typography>
+            <Typography>
+              Estimated Diameter (km):
+              {
+                asteroidData.estimated_diameter?.kilometers
+                  ?.estimated_diameter_min
+              }
+              -
+              {
+                asteroidData.estimated_diameter?.kilometers
+                  ?.estimated_diameter_max
+              }
+            </Typography>
+            <Typography>
+              Estimated Diameter (miles):
+              {asteroidData.estimated_diameter?.miles?.estimated_diameter_min} -
+              {asteroidData.estimated_diameter?.miles?.estimated_diameter_max}
+            </Typography>
+          </Paper>
         </Container>
       </>
     );

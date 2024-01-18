@@ -1,9 +1,9 @@
-import React from "react";
+import { Component } from "react";
 import Form from "./components/Form";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Asteroid from "./components/Asteroid";
 
-class App extends React.Component {
+class App extends Component {
   render() {
     return (
       <Router>
@@ -17,4 +17,3 @@ class App extends React.Component {
 }
 
 export default App;
-
