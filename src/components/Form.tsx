@@ -42,10 +42,6 @@ class Form extends Component<FormProps, FormState> {
       const response = await axios.get(
         `https://api.nasa.gov/neo/rest/v1/neo/${this.state.asteroidId}?api_key=${this.API_KEY}`
       );
-
-      if (!response.data) {
-        toast.error(`Error: ${response.status}`);
-      }
       const data = await response.data;
 
       this.props.navigate("/details", { state: data });
@@ -55,23 +51,15 @@ class Form extends Component<FormProps, FormState> {
   };
 
   handleRandomData = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
-      );
+    const response = await axios.get(
+      `https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=${this.API_KEY}`
+    );
+    const data = await response.data;
+    const number = Math.floor(Math.random() * data.near_earth_objects.length);
 
-      if (!response.data) {
-        toast.error(`Error: ${response.status}`);
-      }
-      const data = await response.data;
-      const number = Math.floor(Math.random() * data.near_earth_objects.length);
-
-      this.props.navigate(`/details`, {
-        state: data.near_earth_objects[number],
-      });
-    } catch (error) {
-      toast.error(`Error: ${error}`);
-    }
+    this.props.navigate(`/details`, {
+      state: data.near_earth_objects[number],
+    });
   };
 
   handleInputChange = (
@@ -121,7 +109,7 @@ class Form extends Component<FormProps, FormState> {
                 fontWeight: "bolder",
                 color: "lightgray",
               }}
-              data-testid = "homeClick"
+              data-testid="homeClick"
             >
               <Typewriter
                 loop

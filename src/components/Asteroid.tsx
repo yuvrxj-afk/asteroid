@@ -10,7 +10,6 @@ interface asteroidProps {
   name: string;
   name_limited?: string;
   absolute_magnitude_h?: number;
-  is_potentially_hazardous_asteroid?: boolean;
   estimated_diameter?: {
     kilometers: {
       estimated_diameter_min: number;
@@ -23,29 +22,30 @@ interface asteroidProps {
   };
 }
 
-class Asteroid extends Component<asteroidProps> {
-  render() {
-    const asteroidData = this.props.location.state as asteroidProps;
-    const bgStyling = {
-      background: `rgba(0, 0, 0, 0.4)`,
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      objectFit: "cover",
-      minWidth: "100vw",
-      position: "relative",
-      zIndex: "2",
-    };
+interface asteroidState {
+  asteroidData: asteroidProps | null;
+}
 
-    const panelStyling = {
-      backgroundColor: "rgba(240, 240, 240, 0.2)",
-      color: "white",
-      padding: "16px",
-      borderRadius: "8px",
-      maxHeight: "50vh",
-      top: "0px",
+class Asteroid extends Component<asteroidProps, asteroidState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      asteroidData: null,
     };
+  }
+  componentDidMount() {
+    const { location } = this.props;
+    const asteroidset: asteroidProps = location.state;
+    const asteroidxData: asteroidProps = asteroidset;
+    this.setState({ asteroidData: asteroidxData });
+  }
+
+  render() {
+    // const asteroidData = this.props.location.state as asteroidProps;
+    const { asteroidData } = this.state;
+    if (!asteroidData) {
+      return null;
+    }
 
     return (
       <>
@@ -80,10 +80,31 @@ class Asteroid extends Component<asteroidProps> {
         </AppBar>
 
         {/* Main container */}
-        <Container sx={bgStyling}>
+        <Container
+          sx={{
+            background: `rgba(0, 0, 0, 0.4)`,
+            minHeight: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            objectFit: "cover",
+            minWidth: "100vw",
+            position: "relative",
+            zIndex: "2",
+          }}
+        >
           {/* Returning the API Response */}
 
-          <Paper sx={panelStyling}>
+          <Paper
+            sx={{
+              backgroundColor: "rgba(240, 240, 240, 0.2)",
+              color: "white",
+              padding: "16px",
+              borderRadius: "8px",
+              maxHeight: "50vh",
+              top: "0px",
+            }}
+          >
             <Typography variant="h4" mb={2} fontWeight={"bold"}>
               Asteroid Information
             </Typography>
@@ -92,10 +113,6 @@ class Asteroid extends Component<asteroidProps> {
             <Typography>Name (Limited): {asteroidData.name_limited}</Typography>
             <Typography>
               Absolute Magnitude (H): {asteroidData.absolute_magnitude_h}
-            </Typography>
-            <Typography>
-              Is Potentially Hazardous Asteroid:
-              {asteroidData.is_potentially_hazardous_asteroid ? "Yes" : "No"}
             </Typography>
             <Typography>
               Estimated Diameter (km):

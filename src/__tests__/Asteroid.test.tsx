@@ -1,25 +1,21 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render} from "@testing-library/react";
 import "@testing-library/jest-dom"; // Importing Jest DOM extension
 import Asteroid from "../components/Asteroid";
-import { BrowserRouter as Router } from "react-router-dom";
+import { MemoryRouter as Router } from "react-router-dom";
 
-const MockAsteroid = () => {
-  return (
-    <Router>
+
+const mockLocation = {state:{}};
+test("checking if go back button works or not", () => {
+  const { getByText } = render(
+    <Router
+      initialEntries={[{ pathname: "/1234567", state: mockLocation.state }]}
+    >
       <Asteroid />
     </Router>
   );
-};
-
-describe("Asteroid component", () => {
-  test("renders asteroid information", () => {
-    render(<MockAsteroid />);
-  });
-  test("Goes back to Home if Clicked", () => {
-    render(<MockAsteroid />);
-    const goBackElement = screen.getByTestId("homeClick");
-    expect(window.location.href).toMatch("http://localhost/");
-    fireEvent.click(goBackElement);
-    expect(window.location.href).toMatch("/");
-  });
+  
+  const backButton = getByText(/Go Back/i);
+  fireEvent.click(backButton);
+  expect(window.location.pathname).toBe("/");
 });
+
